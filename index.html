@@ -12,12 +12,15 @@
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
     <style>
+        .bodyDrop{
+            background-color: #212529;
+        }
+
         #container{
             text-align: center;
             justify-content: center;
             height: 100vh;
             flex-direction: column;
-            
         }    
 
         .play{
@@ -32,9 +35,9 @@
     </style>
 </head>
 
-<body>
+<body class="" id="body">
     <div class="container d-flex align-items-center" id="container">
-        <label>Press</label>
+        <label>Press & Hold</label>
         <button class="btn shadow-none" @touchstart="playmusic" @touchend="stopmusic" @mousedown="playmusic" @mouseup="stopmusic" id="play"><i class="fas fa-play-circle play"></i></button>
     </div>
 
@@ -46,16 +49,39 @@
 
         var app = new Vue({
             el: "#container",
+            data: {
+                ubahWarna : false
+            },
+
+            beforeDestroy() {
+                clearInterval(this.addInterval)
+            },
 
             methods: {
                 playmusic: function(e){
                     document.getElementById("play").style.color="crimson"
                     astronomia.play();
-                    console.log(astronomia.duration())
+                    setTimeout( ()=> this.startDropping(), 8500)
+                    
                 },
                 stopmusic: function(e){
                     document.getElementById("play").style.color="#212529"
                     astronomia.stop();
+                    clearInterval(this.addInterval)
+                    document.body.classList.remove("bodyDrop");
+                },
+
+                startDropping : function(e){
+                    this.addInterval = setInterval(()=> this.intervalStart(), 500)
+                },
+                intervalStart: function(){
+                    this.ubahWarna = !this.ubahWarna
+                    if(this.ubahWarna){
+                        document.body.classList.add("bodyDrop");
+                    }
+                    else if (!this.ubahWarna){
+                        document.body.classList.remove("bodyDrop");
+                    }
                 }
             }            
         })
