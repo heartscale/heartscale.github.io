@@ -73,12 +73,13 @@
           playmusic: function (e) {
             document.getElementById("play").style.color = "crimson";
             astronomia.play();
-            setTimeout(() => this.startDropping(), 8500);
+            this.addTimeout = setTimeout(() => this.startDropping(), 8500);
           },
           stopmusic: function (e) {
             document.getElementById("play").style.color = "#212529";
             astronomia.stop();
             clearInterval(this.addInterval);
+            clearTimeout(this.addTimeout);
             document.body.classList.remove("bodyDrop");
           },
 
